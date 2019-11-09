@@ -1,4 +1,4 @@
-module HdbCarParkingMigrator
+module CarParkingMigrator
   module Svy21ToWgs84Converter
     MAX_RETRY_LIMIT = 5
 
@@ -6,7 +6,7 @@ module HdbCarParkingMigrator
       raise RetryLimitReached if retry_count >= MAX_RETRY_LIMIT
 
       HTTParty.get(
-        HdbCarParkingMigrator::Constant::SVY21_TO_WGS84_URL,
+        CarParkingMigrator::Constant::SVY21_TO_WGS84_URL,
         query: {X: x, Y: y}
       ).parsed_response
     rescue Errno::ECONNRESET => _ex

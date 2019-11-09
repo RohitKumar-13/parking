@@ -1,4 +1,4 @@
-class HdbCarParking < ApplicationRecord
+class CarParking < ApplicationRecord
   enum car_park_type: {
     basement_car_park: 'BASEMENT CAR PARK',
     multi_storey_car_park: 'MULTI-STOREY CAR PARK',

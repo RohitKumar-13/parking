@@ -30,7 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hdb_car_parking_migrator:
-    errors:
-      file_extension_error: 'Invalid file! please use csv file to migrate data'
-      retry_limit_reached: 'Max retry limit reached for SVY21 to WGS84 API'
+  errors:
+    file_extension_error: 'Invalid file! please use csv file to migrate data'
+    retry_limit_reached: 'Max retry limit reached for SVY21 to WGS84 API'
+    required_params_missing_for_api: 'Required params %{keys} missing from API.'

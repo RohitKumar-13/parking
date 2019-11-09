@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_09_105107) do
+ActiveRecord::Schema.define(version: 2019_11_09_155515) do
 
-  create_table "hdb_car_parkings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "car_parkings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "car_park_no", null: false
     t.string "address", null: false
     t.float "x_coord", null: false
@@ -27,10 +27,25 @@ ActiveRecord::Schema.define(version: 2019_11_09_105107) do
     t.boolean "car_park_basement", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["car_park_type"], name: "index_hdb_car_parkings_on_car_park_type"
-    t.index ["type_of_parking_system"], name: "index_hdb_car_parkings_on_type_of_parking_system"
-    t.index ["x_coord"], name: "index_hdb_car_parkings_on_x_coord"
-    t.index ["y_coord"], name: "index_hdb_car_parkings_on_y_coord"
+    t.index ["car_park_no"], name: "index_car_parkings_on_car_park_no"
+    t.index ["car_park_type"], name: "index_car_parkings_on_car_park_type"
+    t.index ["type_of_parking_system"], name: "index_car_parkings_on_type_of_parking_system"
+    t.index ["x_coord", "y_coord"], name: "index_car_parkings_on_x_coord_and_y_coord"
+    t.index ["x_coord"], name: "index_car_parkings_on_x_coord"
+    t.index ["y_coord"], name: "index_car_parkings_on_y_coord"
+  end
+
+  create_table "parking_lots", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "carpark_number"
+    t.integer "total_lots"
+    t.string "lot_type"
+    t.integer "lots_available"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["carpark_number", "lot_type"], name: "index_parking_lots_on_carpark_number_and_lot_type", unique: true
+    t.index ["carpark_number", "lots_available"], name: "index_parking_lots_on_carpark_number_and_lots_available"
+    t.index ["carpark_number"], name: "index_parking_lots_on_carpark_number"
+    t.index ["lots_available"], name: "index_parking_lots_on_lots_available"
   end
 
 end
