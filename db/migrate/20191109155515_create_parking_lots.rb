@@ -1,10 +1,10 @@
 class CreateParkingLots < ActiveRecord::Migration[6.0]
   def change
     create_table :parking_lots do |t|
-      t.string :carpark_number
-      t.integer :total_lots
-      t.string :lot_type
-      t.integer :lots_available
+      t.string :carpark_number, null: false
+      t.integer :total_lots, default: 0
+      t.string :lot_type, null: false
+      t.integer :lots_available, default: 0
       t.timestamps
 
       t.index :carpark_number

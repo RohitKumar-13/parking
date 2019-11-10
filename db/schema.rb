@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(version: 2019_11_09_155515) do
   end
 
   create_table "parking_lots", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "carpark_number"
-    t.integer "total_lots"
-    t.string "lot_type"
-    t.integer "lots_available"
+    t.string "carpark_number", null: false
+    t.integer "total_lots", default: 0
+    t.string "lot_type", null: false
+    t.integer "lots_available", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["carpark_number", "lot_type"], name: "index_parking_lots_on_carpark_number_and_lot_type", unique: true

@@ -1,6 +1,8 @@
 class CarParking < ApplicationRecord
   attribute :distance
 
+  validates_presence_of :car_park_no, :address, :x_coord, :y_coord, :car_park_type, :type_of_parking_system
+
   enum car_park_type: {
     basement_car_park: 'BASEMENT CAR PARK',
     multi_storey_car_park: 'MULTI-STOREY CAR PARK',
