@@ -1,4 +1,4 @@
-# README
+## README
 
 * Ruby version
 **2.6.3**
@@ -29,7 +29,7 @@
 
 ## Models
 
-####1. Car Parking
+#### 1. Car Parking
 Columns
 - car_park_no
 - address
@@ -58,7 +58,7 @@ class CarParking < ApplicationRecord
 end
 ```
 
-####2. Parking Lot 
+#### 2. Parking Lot 
 Columns
 - carpark_number,
 - total_lots
