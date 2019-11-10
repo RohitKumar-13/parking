@@ -1,136 +1,131 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
 * Ruby version
+**2.6.3**
+
+* Rails Version
+**6.0.0**
 
 * System dependencies
+**MySQL**
 
-* Configuration
+* Database creation and updating with CSV and Availability
 
-* Database creation
+    `rake db:setup`
 
-# Metadata for HDB Carpark Information
----
-Identifier: '1a60dcc1-8c9f-450e-ab6f-6d7a03228bfa'
-Name: 'hdb-carpark-information'
-Title: 'HDB Carpark Information'
-Description: 'Information about HDB carparks such as operating hours, car park location
-  (in SVY21), type of parking system, etc.'
-Topics:
-  - 'Transport'
-Keywords:
-  - 'HDB'
-  - 'Housing'
-  - 'Parking'
-  - 'Private Transport'
-  - 'Property'
-  - 'Public Housing'
-Publisher:
-  Name: 'Housing and Development Board'
-  Admin 1:
-    Name: 'Michelle Tay'
-    Department: 'HDB'
-    Email: 'michelle_mb_tay@hdb.gov.sg'
-  Admin 2:
-    Name: 'Toh Xue Qin'
-    Department: 'HDB'
-    Email: 'toh_xue_qin@hdb.gov.sg'
-Sources:
-  - 'Housing and Development Board'
-License: 'https://data.gov.sg/open-data-licence'
-Frequency: 'Monthly'
-Coverage: '2019-10-31 to 2019-10-31'
-Last Updated: '2019-11-01T01:26:26.230700'
-Resources:
-  -
-    Identifier: '139a3035-e624-4f56-b63f-89ae28d4ae4c'
-    Title: 'HDB Carpark Information'
-    Url: 'https://storage.data.gov.sg/hdb-carpark-information/resources/hdb-carpark-information-2019-11-01T01-26-25Z.csv'
-    Format: 'CSV'
-    Coverage: '2019-10-31 to 2019-10-31'
-    Description:
-      - 'Information about HDB carparks such as operating hours, car park location
-        (in SVY21), type of parking system, etc.'
-      - ''
-      - 'Note: The Park and Ride Scheme has ceased with effect from 1 Dec 2016'
-    Last Updated: '2019-11-01T01:26:25.480853'
-    Schema:
-      -
-        Name: 'car_park_no'
-        Title: 'Car Park No.'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'address'
-        Title: 'Address'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'x_coord'
-        Title: 'X Coord'
-        Type: 'geo_coordinate'
-        Sub Type: 'x'
-        Coordinate System: 'EPSG:3414'
-      -
-        Name: 'y_coord'
-        Title: 'Y Coord'
-        Type: 'geo_coordinate'
-        Sub Type: 'y'
-        Coordinate System: 'EPSG:3414'
-      -
-        Name: 'car_park_type'
-        Title: 'Car Park Type'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'type_of_parking_system'
-        Title: 'Type Of Parking System'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'short_term_parking'
-        Title: 'Short Term Parking'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'free_parking'
-        Title: 'Free Parking'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'night_parking'
-        Title: 'Night Parking'
-        Type: 'text'
-        Sub Type: 'general'
-      -
-        Name: 'car_park_decks'
-        Title: 'Car park decks'
-        Type: 'numeric'
-        Sub Type: 'general'
-        Unit Of Measure: 'No. of decks'
-      -
-        Name: 'gantry_height'
-        Title: 'Gantry height'
-        Type: 'numeric'
-        Sub Type: 'general'
-        Unit Of Measure: 'Metres'
-      -
-        Name: 'car_park_basement'
-        Title: 'Car park basement'
-        Type: 'text'
-        Sub Type: 'general'
+    `rake db:migrate`
 
+    `rake parking:load:csv`
 
-* Database initialization
+    `rake parking:load:availability`
 
+* How to run server
+
+    `rails s`
+    
 * How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+    `rspec spec`
 
-* Deployment instructions
+## Models
 
-* ...
+####1. Car Parking
+Columns
+- car_park_no
+- address
+- x_coord
+- y_coord
+- car_park_type
+- type_of_parking_system
+- short_term_parking
+- free_parking
+- night_parking
+- car_park_decks
+- gantry_height
+- car_park_basement
+
+```ruby
+class CarParking < ApplicationRecord
+  has_many :parking_lots, primary_key: :car_park_no, foreign_key: :carpark_number
+  
+  scope :order_by_nearest_to, ->(lat, lng) {
+    # logic to order by distance
+  }
+  
+  scope :available, -> {
+    # logic to return only available car parking
+  }
+end
+```
+
+####2. Parking Lot 
+Columns
+- carpark_number,
+- total_lots
+- lot_type
+- lots_available
+
+```ruby
+class ParkingLot < ApplicationRecord
+  belongs_to :car_parking, foreign_key: :carpark_number, primary_key: :car_park_no
+end
+````
+
+
+### Filter
+
+#### CarParkingFilter
+This filter is responsible for giving Car Parking based on filter params passed to this class
+```ruby
+class CarParkingFilter
+  attr_accessor :car_parkings, :params
+ 
+  def filter
+    order_by_nearest
+    paginate
+    self
+  end
+ 
+  private
+ 
+  # private methods here
+end
+```
+
+
+## Sample API
+**Request**
+
+GET `http://localhost:3000/carparks/nearest?latitude=1.37326&longitude=103.897&page=1&per_page=3`
+
+**Response**
+```json
+[
+  {
+    "address": "BLK 464-468 HOUGANG AVENUE 10",
+    "latitude": 1.37326,
+    "longitude": 103.897,
+    "distance": 0.003888770877809203,
+    "total_slots": 433,
+    "available_slots": 257
+  },
+  {
+    "address": "BLK 401-413, 460-463 HOUGANG AVENUE 10",
+    "latitude": 1.37429,
+    "longitude": 103.896,
+    "distance": 0.17427588611215808,
+    "total_slots": 705,
+    "available_slots": 288
+  },
+  {
+    "address": "BLK 351-357 HOUGANG AVENUE 7",
+    "latitude": 1.37234,
+    "longitude": 103.899,
+    "distance": 0.2525726395966405,
+    "total_slots": 249,
+    "available_slots": 41
+  }
+]
+```
+
+
