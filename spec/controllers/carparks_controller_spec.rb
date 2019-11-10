@@ -80,8 +80,7 @@ RSpec.describe CarparksController, type: :controller do
 
         json.each_with_index do |item, index|
           next if index == json.length - 1
-          p item
-          expect(item['distance']).to be < json[index + 1]['distance']
+          expect(item['distance']).to be <= json[index + 1]['distance']
         end
       end
     end

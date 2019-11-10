@@ -4,6 +4,10 @@ module ParkingAvailabilityMigrator
 
     attr_accessor :availability
 
+    def initialize
+      self.batches = Array.new
+    end
+
     def run!
       fetch do
         save!
