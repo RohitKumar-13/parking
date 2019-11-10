@@ -1,0 +1,4 @@
+carparks:
+  nearest:
+    - latitude
+    - longitude

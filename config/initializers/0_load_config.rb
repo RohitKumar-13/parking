@@ -1,0 +1,1 @@
+CONTROLLER_PARAMS_VALIDATION = YAML.load_file("#{Rails.root}/config/controller_params_validation.yml")
